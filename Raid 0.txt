@@ -1,0 +1,43 @@
+
+Raid 0 configuration
+--------------------
+
+Requirement : one centos7 VM having One Boot disk = 20GB , Raid disk 1 = 20GB , Raid disk 2 = 20GB
+
+#	blkid                       -> gives the UUID of attach disks
+#	lsblk	
+#	yum install mdadm
+#	mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc
+#	mkfs.ext4 /dev/md0
+#	mkdir /mnt/raid0-drive
+#	mount /dev/md0 /mnt/raid0-drive
+#	df -Th
+
+
+To attach controller permanently
+--------------------------------
+
+#	blkid /dev/md0
+		
+			-> Copy the ID   for ex:>>    UUID="6eebbd10-2735-47f0-971c-dfc7579e3cc9" TYPE="ext4"
+
+# 	vi /etc/fstab
+
+			-> Paste the ID    as >>      UUID=6eebbd10-2735-47f0-971c-dfc7579e3cc9 /mnt/raid0-drive	ext4	defaults	0 0 
+
+#	mdadm --detail /dev/md0
+
+#	mount -arv
+
+#	init 6
+
+#	mdadm --detail /dev/md0
+
+#	df -Th
+
+Stop and remove a RAID array
+----------------------------
+
+#	umount /mnt/raid0-drive
+#	mdadm --stop /dev/md0
+#	mdadm --remove /dev/md0

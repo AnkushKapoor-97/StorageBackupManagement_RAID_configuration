@@ -1,0 +1,43 @@
+Raid 10 (1+0) configuration
+--------------------
+
+Requirement : one centos7 VM having One Boot disk = 20GB , Raid disk 1 = 20GB , Raid disk 2 = 20GB , Raid disk 3 = 20GB , Raid disk 4 = 20GB
+
+#	blkid                       -> gives the UUID of attach disks
+#	lsblk	
+#	yum install mdadm
+#	mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd /dev/sde
+#	mkfs.ext4 /dev/md0
+#	mkdir /mnt/raid10-drive
+#	mount /dev/md0 /mnt/raid10-drive
+#	df -Th
+
+
+To attach controller permanently
+--------------------------------
+
+#	blkid /dev/md0
+		
+			-> Copy the ID   for ex:>>   UUID="46dd2b9c-3f50-4445-a991-6a7c15bc2f64" TYPE="ext4"
+
+# 	vi /etc/fstab
+
+			-> Paste the ID    as >>      UUID=46dd2b9c-3f50-4445-a991-6a7c15bc2f64 /mnt/raid10-drive	ext4	defaults	0 0 
+
+#	mdadm --detail /dev/md0
+
+#	mount -arv
+
+#	init 6
+
+#	mdadm --detail /dev/md0
+
+#	df -Th
+
+Note : #	halt 		-> This command used by root >> This command writes data to the disk and then stops the processor.    
+Stop and remove a RAID array
+----------------------------
+
+#	umount /mnt/raid10-drive
+#	mdadm --stop /dev/md0
+#	mdadm --remove /dev/md0
