@@ -40,4 +40,5 @@ Stop and remove a RAID array
 
 #	umount /mnt/raid0-drive
 #	mdadm --stop /dev/md0
+#	mdadm --zero-superblock /dev/sdb /dev/sdc
 #	mdadm --remove /dev/md0
